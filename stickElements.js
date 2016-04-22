@@ -1,31 +1,75 @@
+'use strict';
 
-    var stick = $('.btn-sign-up-now'),
-        container = $('.btn-sign-up-now-container'),
-        planBox = $('.plan-column'),
-        findPlan = $(planBox).each(function() {
-          this._bar = $(this).find(stick);
-          this._ctn = $(this).find(container);
-        });
+var StickElement = (function (root,$) {
 
-    function fixpos() {
-      findPlan.each(function(){
+  // stick element to page bottom when the same or other element is visible
+  function stick() {
 
-        var br = this.getBoundingClientRect();
-        // $(this._bar).toggleClass("sticky", br.top<0 && br.bottom>0);
-        var Hbreakpoint   = 150;
-        var isFarEnough   = root.UI.getTopDistance() - br.height - Hbreakpoint;
-        $(this._bar).toggleClass("sticky", br.top<0 && br.bottom>0);
+    // vars declaration
+    var basicPlan = document.querySelector('#basic-plan-wrapper'),
+        specializedPlan = document.querySelector('#specialized-plan-wrapper'),
+        wrapBtnBasicPlan = basicPlan.querySelector('.btn-sign-up-wrapper'),
+        wrapBtnSpecializedPlan = specializedPlan.querySelector('.btn-sign-up-wrapper'),
+        btnBasicPlan = wrapBtnBasicPlan.querySelector('a'),
+        btnSpecializedPlan = wrapBtnSpecializedPlan.querySelector('a');
 
-        console.log('top=' + br.top + ' bottom=' + br.bottom + ' enough=' + isFarEnough);
-      });
+    // check if the element is visible
+    function checkVisible(elm) {
+        // get element coordinates 
+        var rect = elm.getBoundingClientRect();
+        // calculate height with a -50px margin from top
+        var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight) - 50;
+        // return element position
+        return !(rect.top < 0 || rect.top - viewHeight >= 0);
     }
 
-    var pester = document.getElementById('pg2');
-    var tester = document.getElementById('ag2');
-    var bester = document.getElementById('abcde');
+    // sticky btn basic plan when basic plan wrapper is visible
+    function BtnBasicPlanFixed(){
+      if (checkVisible(basicPlan)) {
+          $(btnBasicPlan).addClass("sticky");
+      } else{
+        $(btnBasicPlan).removeClass("sticky");
+      }
+    }
 
-    var wrapper = document.getElementById('wrapper');
+    // sticky btn specialized plan when specialized plan wrapper is visible
+    function BtnSpecializedPlanFixed(){
+      if (checkVisible(specializedPlan)) {
+          $(btnSpecializedPlan).addClass("sticky");
+      } else{
+        $(btnSpecializedPlan).removeClass("sticky");
+      }
+    }
 
-    window.onscroll = function() {
-      wrapper.style.backgroundColor = checkVisible(tester) ? '#4f4' : '#f44';
-    };
+    // remove sticky element when btn basic plan wrapper is visible
+    function WrapperBasicPlanFixed(){
+      if (checkVisible(wrapBtnBasicPlan)) {
+        $(btnBasicPlan).removeClass("sticky");
+      }
+    }
+
+    // remove sticky element when btn specialized plan wrapper is visible
+    function WrapperSpecializedPlanFixed(){
+      if (checkVisible(wrapBtnSpecializedPlan)) {
+        $(btnSpecializedPlan).removeClass("sticky");
+      }
+    }
+
+    BtnBasicPlanFixed();
+    BtnSpecializedPlanFixed();
+    WrapperBasicPlanFixed();
+    WrapperSpecializedPlanFixed();
+
+  }
+
+  function init() {
+    stick();
+
+    root.PubSub.subscribe('onScroll', stick);
+    root.PubSub.subscribe('onResize', stick);
+  }
+
+  init();
+})(app, $);
+
+module.exports = StickElement;
