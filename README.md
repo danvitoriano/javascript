@@ -8,4 +8,5 @@ https://github.com/danvitoriano/javascript/blob/master/stickElements.js
 https://github.com/danvitoriano/javascript/blob/master/pubSub.js
 
 ## hasClassFn.js
+
 https://github.com/danvitoriano/javascript/blob/master/hasClassFn.js
