@@ -10,4 +10,5 @@ https://github.com/danvitoriano/javascript/blob/master/pubSub.js
 ## hasClassFn.js
 https://github.com/danvitoriano/javascript/blob/master/hasClassFn.js
 
-TESTE
+## mapFn.js
+How to use map + regex
